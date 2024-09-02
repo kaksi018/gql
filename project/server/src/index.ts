@@ -1,21 +1,10 @@
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { AppDataSource } from "./db/db-client";
 import express from 'express';
 import {ApolloServer, gql} from 'apollo-server-express';
 import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 import http from 'http';
 
-const AppDataSource = new DataSource({
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "qwer1234",
-    database: "ghibli_graphql",
-    entities: [],
-    synchronize: true,
-    logging: false,
-})
 
 // to initialize the initial connection with the database, register all entities
 // and "synchronize" database schema, call "initialize()" method of a newly created database
