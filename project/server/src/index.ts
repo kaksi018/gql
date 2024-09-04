@@ -4,27 +4,23 @@ import express from 'express';
 import {ApolloServer, gql} from 'apollo-server-express';
 import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 import http from 'http';
+import {buildSchema} from 'type-graphql';
+import { FilmResolver } from "./resolvers/Film";
 
-
-// to initialize the initial connection with the database, register all entities
-// and "synchronize" database schema, call "initialize()" method of a newly created database
-// once in your application bootstrap
-AppDataSource.initialize()
+// 외부 DB 연결시 사용  
+/* AppDataSource.initialize()
     .then(() => {
         console.log(`연결성공`);
     })
     .catch((error) => console.log(error))
-
+ */
 async function main() {
   const app = express();
 
   const apolloServer = new ApolloServer({
-    typeDefs:gql`type Query {hello:String}`,
-    resolvers:{
-      Query: {
-        hello: () => `Hello world`
-      }
-    },
+    schema: await buildSchema({
+      resolvers: [FilmResolver]
+    }),
     plugins: [ApolloServerPluginLandingPageLocalDefault()]
   });
   await apolloServer.start();
