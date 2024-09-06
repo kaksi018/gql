@@ -37,8 +37,7 @@ export default function FilmDetail({ film }: FilmDetailProps): React.ReactElemen
         </Heading>
         <Text mb={2}>
           {film?.director.name}
-          {'  &midot;  '}
-          {!film ? '' : `${film?.runningTime} 분`}
+          {!film ? '' : `  /  ${film?.runningTime} 분`}
         </Text>
         <Text fontSize="sm">{film?.description}</Text>
       </Flex>
