@@ -16,6 +16,8 @@ import { CutResolver } from './resolvers/Cut';
     .catch((error) => console.log(error))
  */
 async function main() {
+  AppDataSource.initialize();
+
   const app = express();
 
   const apolloServer = new ApolloServer({
