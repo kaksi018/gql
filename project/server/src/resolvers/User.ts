@@ -6,9 +6,7 @@ import argon2 from 'argon2';
 @InputType()
 export class SignUpInput {
   @Field() @IsEmail() email: string;
-
   @Field() @IsString() username: string;
-
   @Field() @IsString() password: string;
 }
 

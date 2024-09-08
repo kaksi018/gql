@@ -7,6 +7,9 @@ import http from 'http';
 import { buildSchema } from 'type-graphql';
 import { FilmResolver } from './resolvers/Film';
 import { CutResolver } from './resolvers/Cut';
+import { createSchema } from './apollo/createSchema';
+import createApolloServer from './apollo/createApolloServer';
+import { createSubscriptionServer } from './apollo/createSubscriptionServer';
 
 // 외부 DB 연결시 사용
 /* AppDataSource.initialize()
@@ -16,20 +19,28 @@ import { CutResolver } from './resolvers/Cut';
     .catch((error) => console.log(error))
  */
 async function main() {
-  AppDataSource.initialize();
+  await AppDataSource.initialize();
 
   const app = express();
-
-  const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [FilmResolver, CutResolver],
-    }),
-    plugins: [ApolloServerPluginLandingPageLocalDefault()],
-  });
-  await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+  app.use(express.static('public'));
 
   const httpServer = http.createServer(app);
+
+  const schema = await createSchema();
+  await createSubscriptionServer(schema, httpServer);
+  const apolloServer = await createApolloServer(schema);
+  await apolloServer.start();
+  apolloServer.applyMiddleware({
+    app,
+    cors: {
+      origin: [
+        'http://localhost:3000',
+        'https://studio.apollographql.com',
+        process.env.FRONT_ORIGIN || '',
+      ],
+      credentials: true,
+    },
+  });
 
   httpServer.listen(process.env.PORT || 4000, () => {
     if (process.env.NODE_ENV !== 'production') {
@@ -43,4 +54,4 @@ async function main() {
   });
 }
 
-main().catch((err) => console.log(err));
+main().catch((err) => console.error(err));

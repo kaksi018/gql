@@ -29,9 +29,9 @@ export default class User extends BaseEntity {
 
   @Field(() => String, { description: '생성일자' })
   @CreateDateColumn({ comment: '생성일자' })
-  createAt: Date;
+  createdAt: Date;
 
-  @Field({ description: '업데이트일자' })
+  @Field(() => String, { description: '업데이트일자' })
   @UpdateDateColumn({ comment: '업데이트일자' })
-  updateAt: Date;
+  updatedAt: Date;
 }
