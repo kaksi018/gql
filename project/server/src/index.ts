@@ -10,6 +10,8 @@ import { CutResolver } from './resolvers/Cut';
 import { createSchema } from './apollo/createSchema';
 import createApolloServer from './apollo/createApolloServer';
 import { createSubscriptionServer } from './apollo/createSubscriptionServer';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 
 // 외부 DB 연결시 사용
 /* AppDataSource.initialize()
@@ -23,6 +25,7 @@ async function main() {
 
   const app = express();
   app.use(express.static('public'));
+  app.use(cookieParser());
 
   const httpServer = http.createServer(app);
 
